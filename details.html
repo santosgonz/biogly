@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>{{user.first_name}} {{user.last_name}}</h1>
+    <h2>{{user.image_url}}</h2>
+    
+    <form action = "/{{user.id}}/edit" id="edit" method = "GET">
+        <button type = "submit">Edit</button>
+    </form>
+    <form action = '/users/{{user.id}}/delete' id="delete" method="POST">
+        <button type = "delete">Delete</button>
+    </form>
+
+    <form action = '/users/{{user.id}}/posts/new'' id="user_post" method = "GET">
+        <button type = "submit">Add Post</button>
+    </form>
+
+    <table>
+        <tbody>
+            {% for post in posts %}
+            <tr>
+                <td><a href="/users/{{user.id}}/posts/{{post.id}}">{{ post.title }}</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+
