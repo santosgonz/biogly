@@ -10,6 +10,12 @@
     <form id="create_post" method="POST">
         <input name = "enter_post" type = "text" placeholder = "Post Goes Here">
         <input name = "enter_content" type = "text" placeholder = "Content Goes Here">
+        {% for tag in tags %}
+            <label>
+                <input type="radio" name="tag" value="{{ tag.id }}">
+                {{ tag.tags }}
+            </label>
+        {% endfor %}
         <button type = "submit">Add</button>
     </form>
 </body>

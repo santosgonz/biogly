@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>{{tag.tags}}</h1>
+
+    <form action="/tags/{{tag.id}}/edit" id="edit" method="GET">
+        <button type="submit">Edit</button>
+    </form>
+    <form action="/tags/{{tag.id}}/delete" id="delete" method="POST">
+
+        <button type="submit">Delete</button>
+    </form>
+
+    <table>
+        <tbody>
+            {% for post in posts %}
+            <tr>
+                <td><a href="/users/{{ users[post.id].id }}/posts/{{ post.id }}">{{ post.title }}</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

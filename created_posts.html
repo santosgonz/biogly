@@ -14,6 +14,10 @@
     </form>
     <form action = '/users/{{user.id}}/{{posts.id}}/delete' id="delete" method="POST">
         <button type = "delete">Delete</button>
+    <h1>Tags</h1>
+    {% for tag in tags %}
+        <span>{{ tag.tags }}</span>
+    {% endfor %}
 </body>
 </html>
 

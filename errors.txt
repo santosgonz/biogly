@@ -1,0 +1,31 @@
+146-158 after tag is edited can't figure out how to make it redirect to 'tags.html'
+
+
+
+                                        food_post = Posts.query.get(1)
+                                        food_tag = Tag.query.get(1)
+                                        food_post.post_tags.append(food_tag)
+
+
+
+post_instance = Posts.query.get(1)
+tags = post_instance.post_tags
+tags
+
+
+
+For combining tags to posts
+pizza = Tag.query.get(5)
+food = Posts.query.get(1)
+food.tags.append(pizza)
+
+For combining posts to tags
+pizza.posts.append(food)
+
+
+Ask what happened line 176
+
+Ask what happened line 105 (need clairification)
+
+
+

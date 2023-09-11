@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form method="POST">
+        {% for tag in tags %}
+        <input name = "edit_tag" type = "text" placeholder = "{{tag.tags}}">
+        <button type = "submit">Add</button>
+        {% endfor %}
+    </form>
+</body>
+</html>

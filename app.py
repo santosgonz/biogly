@@ -1,7 +1,7 @@
 """Blogly application."""
 
 from flask import Flask, request, redirect, render_template
-from models import db, connect_db, User, Posts
+from models import db, connect_db, User, Posts, Tag
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
@@ -26,7 +26,7 @@ def users():
 @app.route("/<int:user_id>")
 def show_user(user_id):
     user = User.query.get(user_id)
-    posts = Posts.query.all()
+    posts = Posts.query.filter_by(user_id=user_id).all()
     return render_template("details.html", user=user, posts=posts)
 
 
@@ -82,16 +82,22 @@ def users_delete(user_id):
 
 @app.route('/users/<int:user_id>/posts/new', methods = ["GET"])
 def post(user_id):
-
-    return render_template("user_post.html")
+    tags = Tag.query.all()
+    print (tags)
+    return render_template("user_post.html", tags=tags)
 
 @app.route('/users/<int:user_id>/posts/new', methods = ["POST"])
 def post_print(user_id):
     title = request.form.get("enter_post")
     content = request.form.get("enter_content")
+    tag_id = request.form.get("tag")
     print_post = Posts(title=title, content=content, user_id=user_id)
-
     db.session.add(print_post)
+    if tag_id:
+        tag = Tag.query.get(tag_id)
+        if tag:
+            print_post.tags.append(tag)
+    
     db.session.commit()
 
     return redirect("/users")
@@ -100,7 +106,8 @@ def post_print(user_id):
 def created_posts(user_id, post_id):
     user = User.query.get_or_404(user_id)
     posts = Posts.query.get_or_404(post_id)
-    return render_template('created_posts.html', posts=posts, user=user)
+    tags = posts.tags
+    return render_template('created_posts.html', posts=posts, user=user, tags=tags)
 
 @app.route ('/users/<int:user_id>/posts/<int:post_id>/edit', methods = ["GET"])
 def edit_post(user_id, post_id):
@@ -127,3 +134,55 @@ def posts_delete(user_id, post_id):
     db.session.commit()
 
     return redirect("/users")
+
+@app.route('/tags/new', methods = ["GET"])
+def tag_tag():
+
+    return render_template("user_tag.html")
+
+@app.route('/tags/new', methods = ["POST"])
+def tags_print():
+    tag_test = request.form.get("enter_tag")
+    tag = Tag(tags=tag_test)
+
+    db.session.add(tag)
+    db.session.commit()
+
+    return redirect("/users")
+
+@app.route ('/tag/<int:tag_id>/edit', methods = ["GET"])
+def edit_tag(tag_id):
+    
+    tags = Tag.query.all()
+    return render_template('edit_tag.html', tags=tags)
+
+@app.route ('/tag/<int:tag_id>/edit', methods = ["POST"])
+def post_tag(tag_id):
+
+    tag = Tag.query.get_or_404(tag_id)
+    tag.tags = request.form.get("edit_tag")
+    db.session.commit()
+    return render_template('edit_tag.html',  tag=tag)
+
+# @app.route ('/tags/<int:tag_id>', methods = "GET")
+# def show_tags(tag_id):
+
+#     return render_template('tags.html')
+
+@app.route("/tags")
+def show_tag():
+
+    tags = Tag.query.all()
+    return render_template("tag_details.html", tags=tags)
+
+@app.route("/tags/<int:tag_id>")
+def show_tag_posts(tag_id):
+    tag = Tag.query.get_or_404(tag_id)  # Changed to 'tag'
+    print(f"Tag: {tag}")  # Debug print statement
+    posts = tag.posts
+    users = {post.id: User.query.get(post.user_id) for post in posts}
+    print(f"Posts: {posts}")  # Debug print statement
+    return render_template('lol.html', tag=tag, posts=posts, users=users)  # Changed to 'tag'
+
+
+
